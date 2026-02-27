@@ -1,0 +1,44 @@
+{
+  "saved_at": "2026-02-27 12:37:39",
+  "selected_model": "ridge_tuned",
+  "ridge_alpha": 10.0,
+  "features": [
+    "lag1",
+    "lag7",
+    "lag30",
+    "rolling7_mean",
+    "rolling30_mean",
+    "dow",
+    "month",
+    "num_txns"
+  ],
+  "train_rows": 395,
+  "test_rows": 99,
+  "train_date_range": [
+    "2024-03-27",
+    "2025-09-27"
+  ],
+  "test_date_range": [
+    "2025-10-01",
+    "2026-02-10"
+  ],
+  "deployment_gate": {
+    "metric": "test_r2",
+    "threshold": 0.5,
+    "status": "TRAINING PHASE \u2014 not yet deployable"
+  },
+  "metrics": {
+    "ridge_tuned": {
+      "test_r2": 0.293,
+      "test_mae": 7374.87
+    },
+    "gradient_boosting": {
+      "test_r2": 0.1636,
+      "test_mae": 9071.39
+    },
+    "random_forest": {
+      "test_r2": 0.2461,
+      "test_mae": 8012.48
+    }
+  }
+}
