@@ -1,3 +1,5 @@
+# Firebase config (private)
+firebase-config.js
 .env
 .env.local
 .env.development.local
@@ -16,6 +18,9 @@ node_modules/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Notebooks
+.ipynb_checkpoints/
 
 # Project specific
 *.csv
