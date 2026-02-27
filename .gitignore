@@ -1,0 +1,9 @@
+# Firebase config (private)
+firebase-config.js
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Notebooks
+.ipynb_checkpoints/
