@@ -1,0 +1,4 @@
+priority,category,issue,recommendation,potential_savings
+HIGH,M-Pesa Fees,"High transaction fees: KSh 21,475.00",Consider consolidating transactions or using free channels,6442.5
+MEDIUM,Budget Leaks,"Small frequent expenses: KSh 60,173.00",Set daily spending limits or use cash for small purchases,12034.6
+CRITICAL,Savings,Negative savings rate: -240.7%,URGENT: Expenses exceed income. Review all discretionary spending.,18687.5
