@@ -5,6 +5,8 @@
 [![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
 [![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 
+🚀 **Live Demo:** [https://michellemwende-mpesa-analyzer.hf.space/](https://michellemwende-mpesa-analyzer.hf.space/)
+
 A professional-grade financial intelligence platform that transforms raw M-Pesa PDF statements into actionable insights. This tool combines a rule-based recommendation engine with **Continuous Machine Learning** to categorize spending, predict future burn rates, and provide personalized financial coaching.
 
 ---
