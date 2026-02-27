@@ -8,6 +8,13 @@
 A professional-grade financial intelligence platform that transforms raw M-Pesa PDF statements into actionable insights. This tool combines a rule-based recommendation engine with advanced Machine Learning to categorize spending, predict future burn rates, and provide personalized financial coaching.
 
 ---
+## 📁 Project Assets
+If the file previews below fail to load, please use these direct links:
+
+* 📊 **[Download Project Presentation](./Presentation.pdf)**
+* 📈 **[View M-Pesa Data Report](./MPesa_Personal_Finance_Data_Report.pdf)**
+
+---
 
 ## 🚀 Key Features
 
