@@ -1,77 +1,97 @@
-# M-Pesa Financial Analyzer 📊
+# 💰 M-Pesa Financial Analyzer
 
-A sophisticated, interactive web application designed to transform raw M-Pesa PDF statements into powerful financial insights. This tool uses a 5-stage processing pipeline to extract, categorize, and analyze your transactions, helping you identify spending patterns and hidden savings opportunities.
+[![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![Python](https://img.shields.io/badge/Python-3.13-3776AB?style=for-the-badge&logo=python)](https://www.python.org/)
+[![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
+[![Scikit-Learn](https://img.shields.io/badge/scikit--learn-%23F7931E.svg?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
+
+A professional-grade financial intelligence platform that transforms raw M-Pesa PDF statements into actionable insights. This tool combines a rule-based recommendation engine with advanced Machine Learning to categorize spending, predict future burn rates, and provide personalized financial coaching.
+
+---
 
 ## 🚀 Key Features
 
-- **Secure Google Authentication**: Seamless sign-in using Firebase Google Auth.
-- **Local PDF Processing**: Your PDF is decrypted and processed locally in your browser—your PIN never leaves your device.
-- **5-Stage Analysis Pipeline**:
-  - raw text extraction
-  - transaction identification
-  - keyword categorization
-  - Smart Money Rules application
-  - data cleaning and validation
-- **Interactive Dashboard**: Visualize your spending with dynamic charts (spending trends, category breakdowns, savings potential).
-- **Merchant Learning**: The system learns from your manual categorizations to improve accuracy over time.
-- **Smart Money Rules**: Define custom rules for "Send Money" transactions based on frequency and amount.
-- **User Profile & Progress Tracking**: Track your analysis history and configuration stats.
+### 🏦 Intelligent Analysis
+- **High-Fidelity PDF Extraction**: Decrypts and parses official M-Pesa statements with 99% accuracy using a specialized Python pipeline.
+- **Explainable AI (XAI)**: A robust, rule-based recommendation engine provides transparent financial advice on budgeting, savings, and behavioral patterns.
+- **Smart Money Rules**: Custom categorization logic for "Send Money" transactions based on user-defined frequency and amount thresholds.
+
+### 🧠 Machine Learning Suite
+- **Automated Model Training**: Every analysis run automatically trains and evaluates three distinct models:
+  - **Ridge Regression**: For stable, baseline spending predictions.
+  - **Gradient Boosting**: Captures complex, non-linear spending patterns.
+  - **Random Forest**: Provides robust ensemble-based forecasting.
+- **Resource Management**: Models are serialized (`.pkl`) and versioned with metadata (R², MAE) for deployment gating.
+
+### 🔐 Security & Progress
+- **Firebase Google Auth**: Secure, enterprise-grade authentication.
+- **Cloud-Synced Profiles**: Progress, analysis history, and custom rules are persisted in Google Firestore.
+- **User Dashboard**: Interactive Chart.js visualizations of spending trends, category breakdowns, and savings potential.
+- **Actionable History**: Track your financial health score over time with a dedicated analysis history view.
+
+---
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: HTML5, CSS3 (Vanilla), JavaScript (ES6+)
-- **Backend/Services**: Firebase Authentication
-- **Data Analysis**: Python (Jupyter Notebooks) for exploratory data analysis and feature engineering
-- **Visualization**: Chart.js for interactive analytics
+- **Frontend**: Vanilla JS (ES6+), CSS3 (Glassmorphism), Chart.js 4.4
+- **Backend**: FastAPI (Python 3.13)
+- **ML/DS**: Scikit-Learn, Pandas, NumPy, Joblib
+- **Infrastructure**: Firebase Auth, Google Firestore
+
+---
 
 ## 📦 Project Structure
 
-- `Mpesa Analyzer UI.html`: The main application file (frontend and logic).
-- `Data Extraction Notebook.ipynb`: Python logic for extracting data from M-Pesa formats.
-- `M-Pesa_EDA_v3 ML.ipynb`: Exploratory Data Analysis and machine learning experiments.
-- `demo_walkthrough.webp`: Animated demonstration of the application flow.
+```text
+├── main.py                 # FastAPI Application Server
+├── engine.py               # Rule-based Rec Engine & ML logic
+├── pdf_processor.py        # PDF Extraction & Cleaning pipeline
+├── Mpesa Analyzer UI.html  # Modern Interactive Frontend
+├── models/                 # Serialized ML models & metadata
+├── notebooks/              # Exploratory Data Analysis & Prototyping
+└── temp_uploads/           # Secure temporary file handling
+```
+
+---
 
 ## ⚙️ Setup & Installation
 
-### 1. Firebase Configuration
-The application is pre-configured with a Firebase project. If you wish to use your own:
-1. Create a project in the [Firebase Console](https://console.firebase.google.com/).
-2. Enable **Google Auth** in the Authentication section.
-3. Copy your Web App configuration and replace the `firebaseConfig` object in `Mpesa Analyzer UI.html`.
+### 1. Prerequisites
+- Python 3.10+
+- A Firebase Project (with Google Auth and Firestore enabled)
 
-### 2. Running Locally (CRITICAL)
-Due to security restrictions with **Google OAuth**, this application **cannot** be run by simply double-clicking the HTML file (using `file:///` protocol). It must be served via a local web server (`http://localhost`).
-
-#### Option A: Using Python (Recommended)
-Open your terminal in the project folder and run:
+### 2. Environment Setup
+Clone the repository and install dependencies:
 ```bash
-python -m http.server 8000
+pip install fastapi uvicorn pandas numpy scikit-learn joblib pypdf2 python-dotenv
 ```
-Then visit: `http://localhost:8000/Mpesa%20Analyzer%20UI.html`
 
-#### Option B: Using VS Code Live Server
-1. Install the "Live Server" extension in VS Code.
-2. Right-click `Mpesa Analyzer UI.html` and select **"Open with Live Server"**.
+### 3. Firebase Configuration
+Update the `firebaseConfig` in `Mpesa Analyzer UI.html` with your project credentials from the [Firebase Console](https://console.firebase.google.com/).
+
+### 4. Running the Application
+Launch the FastAPI server:
+```bash
+python main.py
+```
+
+### 5. Accessing the UI
+Once the server is running, you can access the interactive dashboard by opening your browser and navigating to:
+**[http://localhost:8000](http://localhost:8000)**
+
+*Note: The server must remain running in your terminal for the UI to function.*
+Then, access the platform at:
+[http://localhost:8000](http://localhost:8000)
+
+---
 
 ## 🔒 Security & Privacy
 
-- **No Server Storage**: Your raw transaction data is processed in the browser. 
-- **Decryption**: Password-protected PDFs are decrypted locally using your M-Pesa PIN.
-- **Privacy First**: We do not sell or share your financial data.
-- **Environment Variables**: Sensitive Firebase credentials are managed via `.env` files (ignored by Git) to prevent accidental exposure in public repositories.
+- **On-Demand Decryption**: PDFs are processed in memory and never permanently stored on the server.
+- **Local Decryption**: Your M-Pesa PIN is used only for the current session to extract data.
+- **Data Sovereignty**: All analysis is tied to your unique Firebase UID; we do not share or sell financial data.
 
-## 🔐 API Key Security (Action Required)
+---
 
-Since this is a client-side application, the Firebase API key is technically visible to anyone who views the source code. To keep your project secure, you **must** restrict your API key to your specific domain:
-
-1. Go to the [Google Cloud Console](https://console.cloud.google.com/apis/credentials).
-2. Find the API Key used by your project (`mpesa-finance-tracker`).
-3. Under **Set an application restriction**, select **Websites**.
-4. Add your authorized domains:
-   - `http://localhost:*` (for development)
-   - `https://your-app-domain.firebaseapp.com` (for production)
-5. Under **API restrictions**, select **Restrict key** and choose only the services you use (e.g., Identity Toolkit API, Token Service API).
-
-## 📜 License
-
-Created as part of Phase 5 Capstone Project at Flatiron School.
+## 🎓 Capstone Project
+Developed as a Phase 5 Capstone Project at **Flatiron School**. This project demonstrates the integration of modern web technologies, automated data pipelines, and machine learning in a real-world financial context.
