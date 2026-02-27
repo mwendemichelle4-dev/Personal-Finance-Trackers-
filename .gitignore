@@ -18,6 +18,5 @@ node_modules/
 Thumbs.db
 
 # Project specific
-*.pdf
 *.csv
 demo_walkthrough.webp
