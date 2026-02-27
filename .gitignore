@@ -24,4 +24,5 @@ Thumbs.db
 
 # Project specific
 *.csv
+!data/*.csv
 demo_walkthrough.webp
