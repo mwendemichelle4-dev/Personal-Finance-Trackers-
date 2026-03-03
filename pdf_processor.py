@@ -20,13 +20,13 @@ class MpesaPDFParser:
     def __init__(self, password: str = ""):
         self.password = password
 
-    def parse(self, pdf_file_path: str) -> pd.DataFrame:
+    def parse(self, pdf_file_path: str, max_pages: str = 'all') -> pd.DataFrame:
         try:
             tables = tabula.read_pdf(
                 pdf_file_path,
                 password=self.password,
                 encoding='latin-1',
-                pages='all',
+                pages=max_pages,
                 multiple_tables=True
             )
             if not tables:
@@ -161,12 +161,12 @@ class KeywordCategorizer:
         df['category'] = df.apply(self.categorize, axis=1)
         return df
 
-def run_full_pipeline(pdf_path: str, password: str, user_id: str = "demo_user") -> pd.DataFrame:
+def run_full_pipeline(pdf_path: str, password: str, user_id: str = "demo_user", max_pages: str = 'all') -> pd.DataFrame:
     """Runs Stage 1 to Stage 7 equivalents to prepare data for engine.py"""
     
     # Stage 1: PDF to DFS
     parser = MpesaPDFParser(password)
-    df = parser.parse(pdf_path)
+    df = parser.parse(pdf_path, max_pages=max_pages)
     
     # Stage 2: Types
     identifier = TransactionTypeIdentifier()

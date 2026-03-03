@@ -67,6 +67,7 @@
             align-items: center;
             gap: 0.5rem;
             letter-spacing: -0.3px;
+            cursor: pointer;
         }
 
         .nav-links {
@@ -3139,7 +3140,7 @@
     <!-- ===== NAVBAR ===== -->
     <nav class="navbar">
         <div class="navbar-content">
-            <div class="logo">💰 M-Pesa Financial Analyzer</div>
+            <div class="logo" onclick="showScreen('landing')">💰 M-Pesa Financial Analyzer</div>
             <div class="nav-links" id="navLinks" style="display:none;">
                 <a class="nav-link" onclick="showScreen('dashboard')">Dashboard</a>
                 <a class="nav-link" onclick="showScreen('upload')">Upload New</a>
@@ -3147,7 +3148,10 @@
                 <a class="nav-link" onclick="showScreen('help')">Help</a>
             </div>
             <div class="user-info" id="userInfo">
-                <button id="navSignInBtn" class="btn btn-primary btn-sm" onclick="showScreen('login')">Sign in</button>
+                <button id="navSignInBtn" class="btn btn-secondary btn-sm"
+                    onclick="showScreen('login'); setAuthMode('login')">Sign in</button>
+                <button id="navSignUpBtn" class="btn btn-primary btn-sm"
+                    onclick="showScreen('login'); setAuthMode('signup')">Sign up</button>
             </div>
         </div>
     </nav>
@@ -3202,7 +3206,7 @@
 
                     <div class="video-shell"
                         style="border-radius: 20px; overflow: hidden; box-shadow: 0 16px 48px rgba(0,0,0,0.25); background: #0d1f35; max-width: 960px; margin: 0 auto;">
-                        <video src="walkthrough.mp4" autoplay loop muted playsinline
+                        <video src="walkthrough.mp4" playsinline controls preload="none"
                             style="width: 100%; display: block; max-height: 480px; object-fit: cover;"
                             title="M-Pesa Financial Analyzer — App Walkthrough">
                             Your browser does not support the video tag.
@@ -3229,6 +3233,43 @@
                             <div
                                 style="color: white; font-size: 0.85rem; background: rgba(255,255,255,0.12); border-radius: 20px; padding: 0.3rem 0.8rem;">
                                 📊 Dashboard</div>
+                        </div>
+                    </div>
+
+                    <!-- TRANSCRIPTION TOGGLE -->
+                    <div style="max-width: 960px; margin: 1.5rem auto 0; text-align: center;">
+                        <button class="btn btn-secondary btn-sm" onclick="toggleTranscript()" id="transcriptBtn">
+                            📜 View Transcription
+                        </button>
+
+                        <div id="videoTranscript"
+                            style="display: none; margin-top: 1.5rem; text-align: left; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; max-height: 300px; overflow-y: auto; font-size: 0.95rem; line-height: 1.6; color: #334155; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);">
+                            <h4
+                                style="margin: 0 0 1rem 0; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;">
+                                <span>🎙️</span> Video Transcription
+                            </h4>
+                            <div id="transcriptContent">
+                                <p><strong>0:00 - Introduction</strong><br>Welcome to the M-Pesa Financial Analyzer. In
+                                    this walkthrough, we'll show you how to transform your raw statements into
+                                    actionable insights in under two minutes.</p>
+                                <p><strong>0:15 - Signing In</strong><br>Start by signing in with your Google account.
+                                    This secures your data and allows you to track your progress over time.</p>
+                                <p><strong>0:30 - Uploading Statement</strong><br>Simply drag and drop your
+                                    password-protected M-Pesa PDF. Don't worry, your password is only used locally to
+                                    decrypt the file for analysis.</p>
+                                <p><strong>0:45 - Smart Money Rules</strong><br>Next, set your custom rules. This is
+                                    where you define what counts as a recurring expense or a one-time bill, and we
+                                    calculate the savings impact instantly as you adjust the sliders.</p>
+                                <p><strong>1:00 - AI Processing</strong><br>Once you hit Analyze, our engine kicks into
+                                    high gear. You're watching it work in real-time—extracting raw data, identifying
+                                    patterns, and applying your custom rules to every single entry in seconds.</p>
+                                <p><strong>1:20 - Merchant Learning</strong><br>Even the smartest engine needs a mentor.
+                                    The system identifies merchants it doesn't recognize yet. Label them once, and the
+                                    analyzer will remember them forever, improving with every upload.</p>
+                                <p><strong>1:40 - The Dashboard</strong><br>Finally, explore your full financial
+                                    dashboard. Track spending trends, see your true savings rate, and receive AI-powered
+                                    recommendations to optimize your money.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -3538,7 +3579,7 @@
                             <div class="stat-lab">Progress</div>
                         </div>
                         <div class="stat-box">
-                            <div class="stat-val">2,710</div>
+                            <div class="stat-val" id="lAuto">-</div>
                             <div class="stat-lab">Auto-Labelled</div>
                         </div>
                         <div class="stat-box">
@@ -3743,18 +3784,24 @@
                 <div class="auth-card">
                     <div class="auth-header">
                         <div class="auth-logo">💰</div>
-                        <h1 class="auth-title">Welcome Back</h1>
-                        <p class="auth-subtitle">Sign in to continue analyzing your finances</p>
+                        <h1 class="auth-title">Welcome</h1>
+                        <p class="auth-subtitle">Sign in to start analyzing your finances</p>
                     </div>
 
                     <div style="margin-top: 2rem; margin-bottom: 2rem;">
-                        <button class="btn btn-full" onclick="signInWithGoogle()"
+                        <button class="btn btn-full" onclick="signInWithGoogle()" id="googleAuthBtn"
                             style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; background-color: #ffffff; color: #3c4043; border: 1px solid #dadce0; box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15); font-family: 'Google Sans', arial, sans-serif; font-weight: 500; font-size: 1rem; border-radius: 4px; padding: 0.75rem; transition: background-color 0.2s, box-shadow 0.2s; cursor: pointer;">
                             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
                                 alt="Google Logo" style="width: 24px; height: 24px;">
-                            Sign in with Google
+                            <span id="googleAuthText">Sign in with Google</span>
                         </button>
                     </div>
+
+                    <p id="authSwitchText"
+                        style="text-align: center; font-size: 0.9rem; color: var(--muted); margin-bottom: 2rem;">
+                        Don't have an account? <a href="#" onclick="setAuthMode('signup')"
+                            style="color: var(--green); font-weight: 700; text-decoration: none;">Sign up</a>
+                    </p>
 
                     <!-- Navigation buttons -->
                     <div style="display: flex; gap: 1rem; justify-content: space-between; margin-top: 0.5rem;">
@@ -4451,6 +4498,19 @@
             }
         }
 
+        function toggleTranscript() {
+            const el = document.getElementById('videoTranscript');
+            const btn = document.getElementById('transcriptBtn');
+            if (el.style.display === 'none') {
+                el.style.display = 'block';
+                btn.innerHTML = '❌ Close Transcription';
+                el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+                el.style.display = 'none';
+                btn.innerHTML = '📜 View Transcription';
+            }
+        }
+
         // ===================================================================
         // UPLOAD SCREEN
         // ===================================================================
@@ -4483,12 +4543,44 @@
             }
         }
 
-        function goToSmartRules() {
-            if (selectedFile && selectedFile.name.toLowerCase().endsWith('.pdf')) {
+        let scanData = null;
+
+        async function goToSmartRules() {
+            const file = selectedFile || document.getElementById('fileInput').files[0];
+            if (!file) { alert('Please upload a file first'); return; }
+
+            if (file.name.toLowerCase().endsWith('.pdf')) {
                 const pw = document.getElementById('pdfPassword').value;
                 if (!pw) { alert('Please enter the PDF password'); return; }
             }
-            showScreen('smartrules');
+
+            // Call /scan to get real data for the preview
+            const btn = document.getElementById('processBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="spinner" style="display:inline-block; width:12px; height:12px; border:2px solid white; border-top-color:transparent; border-radius:50%; animation:spin 1s linear infinite; margin-right:8px;"></span> Scanning Statement...';
+            btn.disabled = true;
+
+            try {
+                const formData = new FormData();
+                formData.append('file', file);
+                const pw = document.getElementById('pdfPassword').value;
+                if (pw) formData.append('password', pw);
+
+                const response = await fetch('/scan', { method: 'POST', body: formData });
+                if (response.ok) {
+                    scanData = await response.json();
+                    console.log("Scan Data Received:", scanData);
+                } else {
+                    console.warn("Scan failed with status:", response.status);
+                }
+            } catch (err) {
+                console.warn("Scan connection failed:", err);
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                updatePreview();
+                showScreen('smartrules');
+            }
         }
 
         // ===================================================================
@@ -4497,12 +4589,35 @@
         function updatePreview() {
             const f1 = parseInt(document.getElementById('rule1-freq').value) || 2;
             const a1 = parseInt(document.getElementById('rule1-amount').value) || 500;
-            const base = 779;
-            const p1 = Math.round(base * (0.44 + (f1 === 1 ? 0.1 : 0) + (a1 < 500 ? 0.05 : 0)));
-            const p2 = Math.round(base * (0.24 + (a1 > 500 ? 0.05 : 0)));
-            document.getElementById('prev1').textContent = Math.max(0, p1);
-            document.getElementById('prev2').textContent = Math.max(0, p2);
-            document.getElementById('prev3').textContent = Math.max(0, base - p1 - p2);
+            const f2 = parseInt(document.getElementById('rule2-freq').value) || 2;
+            const a2 = parseInt(document.getElementById('rule2-amount').value) || 500;
+
+            let p1 = 0, p2 = 0, p3 = 0;
+            let base = 779;
+
+            if (scanData && scanData.sending_transactions) {
+                base = scanData.total_transactions;
+                scanData.sending_transactions.forEach(tx => {
+                    // Logic matching the engine categorization intent
+                    if (tx.frequency >= f1 && tx.amount >= a1) {
+                        p1++;
+                    } else if (tx.frequency >= f2 && tx.amount < a2) {
+                        p2++;
+                    } else {
+                        p3++;
+                    }
+                });
+                p3 += (scanData.other_count || 0); // Count non-send-money txns as default (Rule 3)
+            } else {
+                // Fallback simulation if scan failed or not available
+                p1 = Math.round(base * (0.44 + (f1 === 1 ? 0.1 : 0) + (a1 < 500 ? 0.05 : 0)));
+                p2 = Math.round(base * (0.24 + (a1 > 300 ? 0.05 : 0)));
+                p3 = Math.max(0, base - p1 - p2);
+            }
+
+            document.getElementById('prev1').textContent = p1;
+            document.getElementById('prev2').textContent = p2;
+            document.getElementById('prev3').textContent = p3;
         }
 
         let backendData = null;
@@ -4616,8 +4731,14 @@
                     const nextEl = document.getElementById('ps' + (s.step + 1));
                     if (nextEl) nextEl.classList.add('active');
                 }
-                i++;
-            }, 700);
+
+                // Fast-track if backend data already arrived
+                if (backendData && i < stages.length - 2) {
+                    i += 1;
+                } else {
+                    i++;
+                }
+            }, 300);
         }
 
         async function finalizeProcessing() {
@@ -4791,8 +4912,18 @@
 
                 // Final transition
                 setTimeout(() => {
-                    showScreen('learning');
-                    if (typeof renderMerchant === 'function') renderMerchant();
+                    // Initialize Merchant Learner with live data
+                    merchants = backendData.merchants_to_learn || [];
+                    mIdx = 0;
+                    document.getElementById('lAuto').textContent = s.auto_labeled_count.toLocaleString();
+
+                    if (merchants.length === 0) {
+                        // Skip learning if everything is already categorized
+                        showScreen('dashboard');
+                    } else {
+                        showScreen('learning');
+                        renderMerchant();
+                    }
                 }, 600);
 
             } catch (err) {
@@ -4805,13 +4936,7 @@
         // ===================================================================
         // MERCHANT LEARNER
         // ===================================================================
-        const merchants = [
-            { id: 'T5160944', name: 'Merchant Payment to 5160944 — LIMURU RONGAI SUPERMARKET', count: 12, amounts: [500, 1200, 800, 600, 450, 750, 900, 550, 650, 1100, 480, 720] },
-            { id: 'P0722123456', name: 'Customer Payment — MARY WANJIRU', count: 8, amounts: [300, 300, 350, 280, 320, 290, 310, 340] },
-            { id: 'T7798896', name: 'Merchant Payment to 7798896 — DAVID MUIRURI KAHUKI', count: 5, amounts: [2000, 1500, 1800, 2200, 1600] },
-            { id: 'P0733445566', name: 'Customer Transfer — JOHN KAMAU', count: 3, amounts: [5000, 4500, 5500] },
-            { id: 'T6617707', name: 'Merchant Payment to 6617707 — AMANI SHOP KINYOZI', count: 4, amounts: [200, 250, 200, 300] },
-        ];
+        let merchants = [];
         let mIdx = 0;
         const categories = ['🚌 Transport', '🥬 Groceries', '🛒 Shopping', '🍽️ Food & Dining', '🔨 Construction', '👥 Friends & Family', '🎉 Entertainment', '💇 Personal Care'];
 
@@ -6139,6 +6264,25 @@
                 });
         }
 
+        function setAuthMode(mode) {
+            const title = document.querySelector('#loginScreen .auth-title');
+            const sub = document.querySelector('#loginScreen .auth-subtitle');
+            const authText = document.getElementById('googleAuthText');
+            const switchText = document.getElementById('authSwitchText');
+
+            if (mode === 'signup') {
+                title.textContent = 'Create Account';
+                sub.textContent = 'Sign up to start your financial journey';
+                authText.textContent = 'Sign up with Google';
+                switchText.innerHTML = 'Already have an account? <a href="#" onclick="setAuthMode(\'login\')" style="color: var(--green); font-weight: 700; text-decoration: none;">Sign in</a>';
+            } else {
+                title.textContent = 'Welcome';
+                sub.textContent = 'Sign in to start analyzing your finances';
+                authText.textContent = 'Sign in with Google';
+                switchText.innerHTML = 'Don\'t have an account? <a href="#" onclick="setAuthMode(\'signup\')" style="color: var(--green); font-weight: 700; text-decoration: none;">Sign up</a>';
+            }
+        }
+
         function signOutUser() {
             auth.signOut().then(() => {
                 showToast('👋 Logged out successfully');
@@ -6229,6 +6373,11 @@
                 document.getElementById('profileNameLg').textContent = name;
                 document.getElementById('profileEmailLg').textContent = user.email || 'No email provided';
 
+                // Move to upload screen immediately for responsiveness
+                if (document.getElementById('loginScreen') && document.getElementById('loginScreen').classList.contains('active')) {
+                    showScreen('upload');
+                }
+
                 // Initial stats from Firestore
                 const userDocRef = db.collection('users').doc(user.uid);
                 userDocRef.get().then((doc) => {
@@ -6237,8 +6386,10 @@
                         document.getElementById('statAnalyzed').textContent = data.analyzedCount || 0;
                         document.getElementById('statRules').textContent = data.rulesConfigured || 3;
                         document.getElementById('statLastUpload').textContent = data.lastUpload || 'Never';
+                        window.isNewUser = false;
                     } else {
-                        // Create initial profile in Firestore
+                        // First time logging in or profile missing
+                        window.isNewUser = true;
                         userDocRef.set({
                             name: name,
                             email: user.email,
@@ -6247,11 +6398,14 @@
                             rulesConfigured: 3,
                             lastUpload: 'Never',
                             createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                        });
+                        }).then(() => console.log("New user profile created in Firestore"));
+
                         document.getElementById('statAnalyzed').textContent = 0;
                         document.getElementById('statRules').textContent = 3;
                         document.getElementById('statLastUpload').textContent = 'Never';
                     }
+                    const welcomeMsg = window.isNewUser ? '✅ Welcome, ' + name + '!' : '✅ Welcome back, ' + name + '!';
+                    showToast(welcomeMsg);
                 }).catch((error) => {
                     console.error("Error getting Firestore document:", error);
                 });
@@ -6307,16 +6461,13 @@
                 });
                 if (navLinks) navLinks.style.display = 'flex';
 
-                // If they were on the login screen, move them to upload
-                if (document.getElementById('loginScreen') && document.getElementById('loginScreen').classList.contains('active')) {
-                    showScreen('upload');
-                    showToast('✅ Welcome back, ' + name + '!');
-                }
+                if (navLinks) navLinks.style.display = 'flex';
             } else {
                 // No user signed in
                 currentUser = null;
                 userInfoDiv.innerHTML = `
-            <button id="googleSignInBtn" class="btn btn-primary btn-sm" onclick="showScreen('login')">Sign in</button>
+            <button class="btn btn-secondary btn-sm" onclick="showScreen('login'); setAuthMode('login')">Sign in</button>
+            <button class="btn btn-primary btn-sm" style="margin-left: 8px;" onclick="showScreen('login'); setAuthMode('signup')">Sign up</button>
         `;
                 if (navLinks) navLinks.style.display = 'none';
 

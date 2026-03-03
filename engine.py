@@ -327,34 +327,35 @@ class RecommendationEngine:
 
         # Prepare merchants for learning based on UNKNOWN patterns
         # Identify merchants that are still 'Other' or 'Uncategorized' after keyword pipeline
-        merch_txns = self.df[self.df['type'].isin(['Till Payment', 'PayBill'])]
+        merch_txns = self.df[self.df['final_category'].isin(['Other', 'Uncategorized', 'Till Payment', 'PayBill'])]
         
         def get_merch_name(row):
             desc = row['description']
-            if ' - ' in desc: return desc.split(' - ')[1].strip()
+            if ' - ' in desc: 
+                # For Till/Paybill e.g. "Merchant Payment to 12345 - RETAILER"
+                return desc.split(' - ')[1].strip()
+            if ' to - ' in desc:
+                # For Send Money e.g. "Send Money to - 0722000000 NAME"
+                return desc.split(' to - ')[1].strip()
             return desc
             
         merch_txns = merch_txns.copy()
         merch_txns['m_name'] = merch_txns.apply(get_merch_name, axis=1)
         
         # Count auto-categorized vs total
-        auto_cats = self.df[self.df['final_category'] != 'Other']
-        uncategorized_count = len(self.df[self.df['final_category'] == 'Other'])
+        auto_cats = self.df[~self.df['final_category'].isin(['Other', 'Uncategorized', 'Till Payment', 'PayBill'])]
         
         counts = merch_txns['m_name'].value_counts()
         merchants_to_teach = []
         # Filter for merchants that the engine couldn't identify strictly
         for name in counts.index:
             m_df = merch_txns[merch_txns['m_name'] == name]
-            # If the majority of transactions for this merchant are 'Other', we need to teach it
-            if m_df['final_category'].iloc[0] in ['Other', 'Uncategorized', 'Till Payment', 'PayBill']:
-                merchants_to_teach.append({
-                    'id': f"m_{name[:8]}",
-                    'name': name,
-                    'count': int(len(m_df)),
-                    'amounts': [round(float(a), 0) for a in m_df['amount_spent'].tolist()]
-                })
-            if len(merchants_to_teach) >= 10: break # Limit to top 10 for UX
+            merchants_to_teach.append({
+                'id': f"m_{name[:8].replace(' ', '_')}",
+                'name': name,
+                'count': int(len(m_df)),
+                'amounts': [round(float(a), 0) for a in m_df['amount_spent'].tolist()]
+            })
 
         return {
             'user_id'        : self.user_id,
